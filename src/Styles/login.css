@@ -1,0 +1,43 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  background-image: url("/public/8239833.jpg");
+  background-size: cover;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.topnav {
+  /* height: 7vh; */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, 10%);
+  width: 25rem;
+  padding: 2.5rem;
+  box-sizing: border-box;
+}
+
+.btn-signup,
+.btn-signin {
+  margin: 0%;
+  padding: 0%;
+  width: 90px;
+  height: 40px;
+  border: none;
+  border: solid 1px;
+  border-radius: 40px;
+  background-color: aliceblue;
+}
+.btn-signup {
+  border-top-right-radius: 1px;
+}
+.btn-signin {
+  border-top-left-radius: 1px;
+}

@@ -1,0 +1,34 @@
+.home-heading {
+  width: 25vw;
+  margin: auto;
+  height: 10vh;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  border-radius: 20px;
+  justify-content: center;
+  background-color: white;
+}
+.home-container {
+  width: 60vw;
+  margin: auto;
+  /* height: 60vh; */
+  border: solid 1px;
+  border-radius: 20px;
+  background-image: linear-gradient(
+    90deg,
+    rgba(253, 251, 251, 0.5) 0%,
+    rgba(235, 237, 238, 0.5) 100%
+  );
+}
+.home-hellow {
+  width: 30vw;
+  margin: auto;
+  height: 10vh;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  border-radius: 20px;
+  justify-content: center;
+  background-color: white;
+}
