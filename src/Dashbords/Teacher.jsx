@@ -19,13 +19,14 @@ export default function Teacher() {
 
   useEffect(() => {
     setLoading(<Loading />);
+    setTableData(null);
     axiosInstance
       .get("/teachers", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
         setLoading(null);
-        console.log("fetched");
+        // console.log("fetched");
         setTableData(res.data);
         setIsAdd(false);
       })
