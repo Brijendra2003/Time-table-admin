@@ -3,6 +3,7 @@ import Fileinpute from "../Components/Fileinpute";
 import Notification from "../Components/Notification";
 import { useEffect, useState } from "react";
 import axiosInstance from "../HelperFiles/axiosInstance.js";
+import Loading from "../Components/loading.jsx";
 
 import "../Styles/Home.css";
 export default function Home() {
@@ -10,6 +11,8 @@ export default function Home() {
   let [Subject, setSubject] = useState(false);
   let [Teacher, setTeacher] = useState(false);
   let [Timetable, setTimetable] = useState(false);
+  let [loading, setLoading] = useState(null);
+
   // console.log("current ", Timetable);
 
   let [triggerd, setTriggered] = useState(false);
@@ -17,6 +20,7 @@ export default function Home() {
   let handletrigger = () => {};
 
   useEffect(() => {
+    setLoading(<Loading />);
     axiosInstance
       .get("/home", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -26,8 +30,10 @@ export default function Home() {
         setSubject(res.data.subject > 0);
         setTeacher(res.data.teacher > 0);
         setTimetable(res.data.timetable > 0);
+        setLoading(null);
       })
       .catch((res) => {
+        setLoading(null);
         console.log(res);
         if (res.message == "Network Error") {
           alert("Server isn't responding. Please retry after some time!");
@@ -44,6 +50,7 @@ export default function Home() {
 
   return (
     <>
+      {loading}
       <Navigation home={true} />
       {username != null && (
         <h3 className="home-hellow">

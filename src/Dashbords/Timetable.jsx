@@ -3,20 +3,26 @@ import "../Styles/Table.css";
 import TimetableRow from "../Components/Timetable-row";
 import axiosInstance from "../HelperFiles/axiosInstance.js";
 import { useEffect, useState } from "react";
+import Loading from "../Components/loading.jsx";
+
 export default function Timetable() {
   let [tableData, setTableData] = useState(null);
   let [trigger, setTrigger] = useState();
+  let [loading, setLoading] = useState(null);
 
   useEffect(() => {
+    setLoading(<Loading />);
     axiosInstance
       .get("/timetable", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
+        setLoading(null);
         // console.log(res.data);
         setTableData(res.data);
       })
       .catch((err) => {
+        setLoading(null);
         console.log(err);
         if (err.message == "Network Error") {
           alert("Server isn't responding. Please retry after some time!");
@@ -35,6 +41,7 @@ export default function Timetable() {
   return (
     <>
       <Navigation timet={true} />
+      {loading}
       <div className="t-container">
         <table className="timeTable">
           <thead>

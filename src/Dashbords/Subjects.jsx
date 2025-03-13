@@ -3,6 +3,7 @@ import "../Styles/Table.css";
 import SubjectRow from "../Components/Subject-row";
 import axiosInstance from "../HelperFiles/axiosInstance.js";
 import { useEffect, useState } from "react";
+import Loading from "../Components/loading.jsx";
 export default function Subjects() {
   let [tableData, setTableData] = useState(null);
   let [isAdd, setIsAdd] = useState(false);
@@ -13,7 +14,9 @@ export default function Subjects() {
     teid: "",
     branch: "",
   });
+  let [loading, setLoading] = useState(null);
   useEffect(() => {
+    setLoading(<Loading />);
     axiosInstance
       .get("/subjects", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -21,8 +24,10 @@ export default function Subjects() {
       .then((res) => {
         // console.log(res.data);
         setTableData(res.data);
+        setLoading(null);
       })
       .catch((err) => {
+        setLoading(null);
         console.log(err);
         if (err.message == "Network Error") {
           alert("Server isn't responding. Please retry after some time!");
@@ -42,6 +47,7 @@ export default function Subjects() {
   const addData = () => {
     console.log(formData);
     setFormData({});
+    setLoading(<Loading />);
     axiosInstance
       .put(
         "/subjects",
@@ -51,12 +57,14 @@ export default function Subjects() {
         }
       )
       .then((res) => {
+        setLoading(null);
         alert(res.data);
         setIsAdd(false);
         setTriggered((prev) => !prev);
         // console.log(res);
       })
       .catch((err) => {
+        setLoading(null);
         console.log(err);
         alert(err.message);
         if (err.message == "Network Error") {
@@ -71,6 +79,7 @@ export default function Subjects() {
 
   return (
     <>
+      {loading}
       <Navigation subj={true} />
       <div className="t-container">
         <table>

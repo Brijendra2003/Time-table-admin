@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axiosInstance from "../HelperFiles/axiosInstance";
+import Loading from "./loading";
+
 export default function TimetableRow({
   branch,
   semester,
@@ -12,6 +14,7 @@ export default function TimetableRow({
   tId,
   refresh,
 }) {
+  let [loading, setLoading] = useState(null);
   const [isedit, setEdit] = useState(false);
   const [editbtn, setEditbtn] = useState(false);
   const [editData, setEditData] = useState({
@@ -37,16 +40,19 @@ export default function TimetableRow({
 
   let submit = () => {
     // console.log(editData);
+    setLoading(<Loading />);
     axiosInstance
       .post(`/timetable${tId}`, editData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
+        setLoading(null);
         // console.log(res);
         alert(res.data);
         location.reload();
       })
       .catch((err) => {
+        setLoading(null);
         console.log(err);
         if (err.message == "Network Error") {
           alert("Server isn't responding. Please retry after some time!");
@@ -59,22 +65,26 @@ export default function TimetableRow({
   };
 
   let deleteRow = () => {
+    setLoading(<Loading />);
     axiosInstance
       .delete(`timetable${tId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
+        setLoading(null);
         // console.log(res.data);
         alert(res.data);
         refresh();
         // location.reload();
       })
       .catch((err) => {
+        setLoading(null);
         console.log(err);
       });
   };
   return (
     <>
+      {loading}
       <tr>
         <td>
           {isedit ? (

@@ -5,11 +5,13 @@ import Notification from "./Components/Notification";
 
 import "./Styles/signin.css";
 import { useState } from "react";
+import Loading from "./Components/loading";
 
 export default function SignIn({ takeToken }) {
   const [formdata, setFormData] = useState({});
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [notify, setNotify] = useState(null);
+  let [loading, setLoading] = useState(null);
 
   const setValue = (event) => {
     setFormData((formdata) => {
@@ -24,10 +26,12 @@ export default function SignIn({ takeToken }) {
     let username = formdata.username;
     let password = formdata.password;
     event.preventDefault();
+    setLoading(<Loading />);
     try {
       const res = await axiosInstance.post("/login", { username, password });
       localStorage.setItem("token", res.data.token); // Store JWT
       localStorage.setItem("username", username);
+      setLoading(null);
       setNotify(<Notification type={"success"} message={res.data.message} />);
       setTimeout(() => {
         setNotify(null);
@@ -35,6 +39,7 @@ export default function SignIn({ takeToken }) {
       }, 2500);
     } catch (error) {
       // alert(error.response.data.error);
+      setLoading(null);
       setNotify(
         <Notification type={"error"} message={error.response.data.error} />
       );
@@ -47,6 +52,7 @@ export default function SignIn({ takeToken }) {
   return (
     <>
       {notify}
+      {loading}
       <div className="box">
         <h2>Sign in</h2>
         <p>Enter your Username and password</p>

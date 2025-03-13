@@ -4,6 +4,7 @@ import TeacherRow from "../Components/Teacher-row";
 import axiosInstance from "../HelperFiles/axiosInstance.js";
 import { useState, useEffect } from "react";
 import Notification from "../Components/Notification.jsx";
+import Loading from "../Components/loading.jsx";
 
 export default function Teacher() {
   let [triggerd, setTriggered] = useState();
@@ -14,18 +15,22 @@ export default function Teacher() {
     tname: "",
     tdept: "",
   });
+  let [loading, setLoading] = useState(null);
 
   useEffect(() => {
+    setLoading(<Loading />);
     axiosInstance
       .get("/teachers", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
+        setLoading(null);
         console.log("fetched");
         setTableData(res.data);
         setIsAdd(false);
       })
       .catch((err) => {
+        setLoading(null);
         // console.log(err);
         alert(err.message);
         if (err.message == "Network Error") {
@@ -44,7 +49,8 @@ export default function Teacher() {
   };
 
   const addData = () => {
-    console.log(formData);
+    // console.log(formData);
+    setLoading(<Loading />);
     axiosInstance
       .put(
         "/teachers",
@@ -54,10 +60,12 @@ export default function Teacher() {
         }
       )
       .then((res) => {
+        setLoading(null);
         alert(res.data);
         // console.log(res);
       })
       .catch((err) => {
+        setLoading(null);
         // console.log(err);
         alert(err.message);
         if (err.message == "Network Error") {
@@ -77,6 +85,7 @@ export default function Teacher() {
   return (
     <>
       <Navigation teacher={true} />
+      {loading}
       <div className="t-container">
         {tableData == null ? (
           <h1>You did not uploaded any data</h1>

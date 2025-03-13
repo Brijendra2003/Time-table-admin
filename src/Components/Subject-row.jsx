@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axiosInstance from "../HelperFiles/axiosInstance";
 import Notification from "./Notification";
+import Loading from "./loading";
+
 export default function SubjectRow({ sid, sname, teid, branch }) {
   const [isedit, setEdit] = useState(false);
   const [editbtn, setEditbtn] = useState(false);
@@ -10,6 +12,7 @@ export default function SubjectRow({ sid, sname, teid, branch }) {
     teid,
     branch,
   });
+  let [loading, setLoading] = useState(null);
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -22,7 +25,8 @@ export default function SubjectRow({ sid, sname, teid, branch }) {
   };
 
   let submit = () => {
-    console.log(editData);
+    // console.log(editData);
+    setLoading(<Loading />);
     axiosInstance
       .post(
         `/subjects${sid}`,
@@ -32,16 +36,19 @@ export default function SubjectRow({ sid, sname, teid, branch }) {
         }
       )
       .then((res) => {
+        setLoading(null);
         alert(res.data);
         // console.log(res);
         location.reload();
       })
       .catch((err) => {
+        setLoading(null);
         console.log(err);
       });
   };
   return (
     <>
+      {loading}
       <tr>
         <td>
           {isedit ? (

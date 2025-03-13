@@ -1,18 +1,24 @@
 import { Link } from "react-router-dom";
 import "../Styles/Navigation.css";
 import axiosInstance from "../HelperFiles/axiosInstance";
+import Loading from "../Components/loading";
 export default function Navigation({ home, teacher, subj, timet }) {
+  let [loading, setLoading] = useState(null);
+
   let logout = () => {
+    setLoading(<Loading />);
     axiosInstance
       .post("/logout", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
+        setLoading(null);
         alert(res.data.message);
         localStorage.clear();
         location.reload();
       })
       .catch((err) => {
+        setLoading(null);
         // console.log(err);
         alert(err.message);
         if (err.message == "Network Error") {
@@ -37,6 +43,7 @@ export default function Navigation({ home, teacher, subj, timet }) {
   }
   return (
     <>
+      {loading}
       <div className="top-navgation">
         <div className="menu">Universal clg</div>
         <ul className="links">

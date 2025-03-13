@@ -1,15 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faL } from "@fortawesome/free-solid-svg-icons";
 import Notification from "./Components/Notification";
 import axiosInstance from "./HelperFiles/axiosInstance";
 
 import "./Styles/signin.css";
 import { useState } from "react";
+import Loading from "./Components/loading";
 
 export default function SignUp() {
   const [formdata, setFormData] = useState({});
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [notify, setNotify] = useState(null);
+  let [loading, setLoading] = useState(null);
 
   const setValue = (event) => {
     setFormData((formdata) => {
@@ -25,17 +27,19 @@ export default function SignUp() {
       let username = formdata.username;
       let password = formdata.password;
       try {
+        setLoading(<Loading />);
         const res = await axiosInstance.post("/register", {
           username,
           password,
         });
         // console.log(res);
-
+        setLoading(null);
         setNotify(<Notification type={"success"} message={res.data.message} />);
         setTimeout(() => {
           setNotify(null);
         }, 2500);
       } catch (error) {
+        setLoading(null);
         setNotify(
           <Notification type={"error"} message={error.response.data.error} />
         );
@@ -55,6 +59,11 @@ export default function SignUp() {
   return (
     <>
       {notify}
+      {loading && (
+        <div className="loading-container">
+          <div className="loader"></div>
+        </div>
+      )}
       <div className="box">
         <h2>Sign UP</h2>
         <p>Register your shelf by generating your Username and password!</p>

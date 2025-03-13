@@ -1,10 +1,12 @@
 import { useState } from "react";
 import axiosInstance from "../HelperFiles/axiosInstance";
 import Notification from "./Notification";
+import Loading from "./loading";
 
 export default function TeacherRow({ tid, tname, tdept, refresh }) {
   const [isedit, setEdit] = useState(false);
   const [notify, setNotify] = useState(null);
+  let [loading, setLoading] = useState(null);
 
   const [editData, setEditData] = useState({
     tid,
@@ -23,6 +25,7 @@ export default function TeacherRow({ tid, tname, tdept, refresh }) {
   };
 
   let submit = () => {
+    setLoading(<Loading />);
     axiosInstance
       .post(
         "/teachers",
@@ -35,6 +38,7 @@ export default function TeacherRow({ tid, tname, tdept, refresh }) {
         }
       )
       .then((res) => {
+        setLoading(null);
         // console.log("succcess");
         setEdit(false);
         setNotify(<Notification type={"success"} message={res.data} />);
@@ -44,6 +48,7 @@ export default function TeacherRow({ tid, tname, tdept, refresh }) {
         refresh();
       })
       .catch((err) => {
+        setLoading(null);
         console.log("error", err);
         setNotify(<Notification type={"error"} message={err} />);
         setTimeout(() => {
@@ -53,12 +58,14 @@ export default function TeacherRow({ tid, tname, tdept, refresh }) {
   };
 
   let deleteRow = () => {
+    setLoading(<Loading />);
     axiosInstance
       .delete("/teachers", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         params: { teacherId: editData.tid },
       })
       .then((res) => {
+        setLoading(null);
         // console.log(res.data);
         refresh();
         // alert(res.data);
@@ -68,6 +75,7 @@ export default function TeacherRow({ tid, tname, tdept, refresh }) {
         }, 2500);
       })
       .catch((err) => {
+        setLoading(null);
         console.log(err);
       });
   };
@@ -75,6 +83,7 @@ export default function TeacherRow({ tid, tname, tdept, refresh }) {
   return (
     <>
       {notify}
+      {loading}
       <tr>
         <td>
           {isedit ? (

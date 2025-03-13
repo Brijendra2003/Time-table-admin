@@ -3,6 +3,7 @@ import excelVerify from "../HelperFiles/verifyExcel";
 import { useState, useEffect } from "react";
 import Notification from "./Notification";
 import axiosInstance from "../HelperFiles/axiosInstance";
+import Loading from "./loading";
 
 export default function Fileinpute({
   lable,
@@ -14,6 +15,7 @@ export default function Fileinpute({
   url,
   filename,
 }) {
+  let [loading, setLoading] = useState(null);
   const [values, setValues] = useState({
     veri: verified,
     upl: uploaded,
@@ -47,7 +49,7 @@ export default function Fileinpute({
         let datas = result.map((data) => Object.values(data));
         // now we converted it into Array of Array
         // console.log("The datas is:- ", datas);
-
+        setLoading(<Loading />);
         axiosInstance
           .post(
             "/home",
@@ -59,6 +61,7 @@ export default function Fileinpute({
             }
           )
           .then((res) => {
+            setLoading(null);
             console.log(res.data.message);
             refresh();
             setNotify(
@@ -69,7 +72,10 @@ export default function Fileinpute({
               // console.log(error);
             }, 2500);
           })
-          .catch((err) => console.log("error acuured", err));
+          .catch((err) => {
+            setLoading(null);
+            console.log("error acuured", err);
+          });
 
         setNotify(
           <Notification
@@ -95,6 +101,7 @@ export default function Fileinpute({
   return (
     <>
       {notify}
+      {loading}
       <div className="fileinpute">
         <label className="file-label"> {lable} </label>
         <div className="verified">
