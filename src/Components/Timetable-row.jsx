@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axiosInstance from "../HelperFiles/axiosInstance";
 import Loading from "./loading";
+import { useNavigate } from "react-router-dom";
 
 export default function TimetableRow({
   branch,
@@ -14,6 +15,7 @@ export default function TimetableRow({
   tId,
   refresh,
 }) {
+  const navigate = useNavigate();
   let [loading, setLoading] = useState(null);
   const [isedit, setEdit] = useState(false);
   const [editbtn, setEditbtn] = useState(false);
@@ -49,7 +51,8 @@ export default function TimetableRow({
         setLoading(null);
         // console.log(res);
         alert(res.data);
-        location.reload();
+        // location.reload();
+        navigate("Timetables");
       })
       .catch((err) => {
         setLoading(null);
@@ -59,7 +62,8 @@ export default function TimetableRow({
         } else if (err.message == "Request failed with status code 403") {
           alert("You were logged out! Kindly re-login.");
           localStorage.clear();
-          location.reload();
+          // location.reload();
+          navigate("/");
         }
       });
   };

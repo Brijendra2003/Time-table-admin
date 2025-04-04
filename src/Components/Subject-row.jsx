@@ -2,8 +2,10 @@ import { useState } from "react";
 import axiosInstance from "../HelperFiles/axiosInstance";
 import Notification from "./Notification";
 import Loading from "./loading";
+import { useNavigate } from "react-router-dom";
 
 export default function SubjectRow({ sid, sname, teid, branch }) {
+  const navigate = useNavigate();
   const [isedit, setEdit] = useState(false);
   const [editbtn, setEditbtn] = useState(false);
   const [editData, setEditData] = useState({
@@ -39,7 +41,8 @@ export default function SubjectRow({ sid, sname, teid, branch }) {
         setLoading(null);
         alert(res.data);
         // console.log(res);
-        location.reload();
+        // location.reload();
+        navigate("Subjects");
       })
       .catch((err) => {
         setLoading(null);

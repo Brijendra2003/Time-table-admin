@@ -4,7 +4,9 @@ import SubjectRow from "../Components/Subject-row";
 import axiosInstance from "../HelperFiles/axiosInstance.js";
 import { useEffect, useState } from "react";
 import Loading from "../Components/loading.jsx";
+import { useNavigate } from "react-router-dom";
 export default function Subjects() {
+  const navigate = useNavigate();
   let [tableData, setTableData] = useState(null);
   let [isAdd, setIsAdd] = useState(false);
   let [triggered, setTriggered] = useState();
@@ -34,7 +36,8 @@ export default function Subjects() {
         } else if (err.message == "Request failed with status code 403") {
           alert("You were logged out! Kindly re-login.");
           localStorage.clear();
-          location.reload();
+          // location.reload();
+          navigate("/");
         }
       });
   }, [triggered]);
@@ -72,7 +75,8 @@ export default function Subjects() {
         } else if (err.message == "Request failed with status code 403") {
           alert("You were logged out! Kindly re-login.");
           localStorage.clear();
-          location.reload();
+          // location.reload();
+          navigate("/");
         }
       });
   };

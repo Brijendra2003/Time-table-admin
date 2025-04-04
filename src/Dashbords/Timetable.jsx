@@ -4,11 +4,14 @@ import TimetableRow from "../Components/Timetable-row";
 import axiosInstance from "../HelperFiles/axiosInstance.js";
 import { useEffect, useState } from "react";
 import Loading from "../Components/loading.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Timetable() {
   let [tableData, setTableData] = useState(null);
   let [trigger, setTrigger] = useState();
   let [loading, setLoading] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(<Loading />);
@@ -29,7 +32,8 @@ export default function Timetable() {
         } else if (err.message == "Request failed with status code 403") {
           alert("You were logged out! Kindly re-login.");
           localStorage.clear();
-          location.reload();
+          // location.reload();
+          navigate("/");
         }
       });
   }, [trigger]);

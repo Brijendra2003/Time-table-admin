@@ -5,8 +5,10 @@ import axiosInstance from "../HelperFiles/axiosInstance.js";
 import { useState, useEffect } from "react";
 import Notification from "../Components/Notification.jsx";
 import Loading from "../Components/loading.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Teacher() {
+  const navigate = useNavigate();
   let [triggerd, setTriggered] = useState();
   let [tableData, setTableData] = useState(null);
   let [isAdd, setIsAdd] = useState(false);
@@ -39,7 +41,8 @@ export default function Teacher() {
         } else if (err.message == "Request failed with status code 403") {
           alert("You were logged out! Kindly re-login.");
           localStorage.clear();
-          location.reload();
+          // location.reload();
+          navigate("/");
         }
       });
   }, [triggerd]);
@@ -74,7 +77,8 @@ export default function Teacher() {
         } else if (err.message == "Request failed with status code 403") {
           alert("You were logged out! Kindly re-login.");
           localStorage.clear();
-          location.reload();
+          // location.reload();
+          navigate("/");
         }
       });
   };
